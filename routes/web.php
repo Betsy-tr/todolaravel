@@ -13,6 +13,14 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+// Listing des tâches
+Route::get('/', [TodoController::class, 'index']) ; 
 
-Route::get('/', [TodoController::class, 'index']) ;
-Route::post('/add',[TodoController::class, 'store'])->name('add');
+// Route pour ajouter une tâche
+Route::post('/add',[TodoController::class, 'create'])->name('add'); 
+
+//Route de mise à jour d'une tâche
+Route::get('/upd/{id}',[TodoController::class, 'update'])->name('upd') ; 
+
+// Route pour supprimer une tâche
+Route::get('/del/{id}',[TodoController::class, 'delete'])->name('del') ; 
