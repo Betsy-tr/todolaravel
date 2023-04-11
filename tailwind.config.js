@@ -3,8 +3,10 @@ module.exports = {
   content: ["./resources/**/*.blade.php",
             "./resources/**/*.js",],
   theme: {
-    extend: {},
-  },
+    extend: {
+          maxWidth: {
+                '8xl': '84rem'
+    }},
   plugins: [],
 }
-
+}

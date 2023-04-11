@@ -9,23 +9,57 @@ use Illuminate\Support\Facades\Validator;
 class TodoController extends Controller
 {
     // Afficher toutes les tâches
-    public function index(){
+    public function index($sort='desc',$tri=''){
 
-        $todos = Todo::all() ;
+      /*  if($sort=='asc'){
+            $todos = Todo::orderBy('created_at','asc')->paginate(10);
+        }else{
+            $todos = Todo::orderBy('created_at','desc')->paginate(10);
+        }
+            
+        */
+        // Filtrage
+        switch ($tri) {
+            case 'active':
+                $todos = Todo::where('status' , 'n') ;
+                break;
+            case 'inactive':
+                $todos = Todo::where('status' , 'o') ;
+                break;
+            default:
+                $todos = Todo::where('status' , 'n')->orWhere('status' , 'o') ;
+                break;
+        }
+       // dd($todos);
+
+
+       if($sort=='asc'){
+        $todos = $todos->orderBy('created_at','asc')->paginate(10);
+        }else{
+            $todos = $todos->orderBy('created_at','desc')->paginate(10);
+        }
+       // $todos = $todos->paginate(10) ; 
 
         return view('accueil' , compact('todos'));
+
     }
+    /*          **** DEUXIEME METHODE ****
+    *
+    * $order = ($sort=='desc')?'desc':asc' ;
+    * $todos = Todo::orderBy('created_at','$order')->paginate(10);
+    */
 
     // Méthode pour enregistrer les données en base
     public function create(Request $request)
     {
-        $request->validate(['task'=>'required']);
+        $request->validate(['task'=>'required|min:15']);
         $todo = new Todo ;
         $todo->task = $request->task ;
         $todo->status = 'n';
         $todo->save();
 
         return redirect('/');
+         
     }
 
     // Méthode pour valider une tâche à partir de son identifiant : $id
